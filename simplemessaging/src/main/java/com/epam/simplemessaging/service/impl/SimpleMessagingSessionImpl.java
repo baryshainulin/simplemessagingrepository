@@ -35,7 +35,7 @@ public class SimpleMessagingSessionImpl implements SimpleMessagingSession {
     processor.put(message);
   }
 
-  public Message receiveMessage(long timeoutMs) {
+  public Message receiveMessage() {
     Message message = processor.take();
     if (theLogger.isLoggable(Level.INFO)) {
       if (message != null) {

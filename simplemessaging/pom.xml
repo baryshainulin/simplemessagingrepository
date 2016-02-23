@@ -14,50 +14,56 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-<!--   <parent> -->
-<!--     <groupId>org.springframework.boot</groupId> -->
-<!--     <artifactId>spring-boot-starter-parent</artifactId> -->
-<!--     <version>1.2.5.RELEASE</version> -->
-<!--     <relativePath></relativePath> -->
-<!--   </parent> -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.2.5.RELEASE</version>
+    <relativePath></relativePath>
+  </parent>
 
   <dependencies>
 
-<!--     <dependency> -->
-<!--       <groupId>org.springframework.boot</groupId> -->
-<!--       <artifactId>spring-boot-starter-log4j</artifactId> -->
-<!--       version>1.2.5.RELEASE</version -->
-<!--     </dependency> -->
-
-<!--     <dependency> -->
-<!--       <groupId>org.springframework.boot</groupId> -->
-<!--       <artifactId>spring-boot-starter</artifactId> -->
-<!--     </dependency> -->
-
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.17</version>
-      </dependency>
+    <!-- <dependency> -->
+    <!-- <groupId>org.springframework.boot</groupId> -->
+    <!-- <artifactId>spring-boot-starter-log4j</artifactId> -->
+    <!-- <version>1.2.5.RELEASE</version> -->
+    <!-- </dependency> -->
 
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>2.5</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.5</version>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+<!--       <version>1.2.17</version> -->
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+<!--       <version>4.2.4.RELEASE</version> -->
+    </dependency>
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.logging.log4j</groupId> -->
+    <!-- <artifactId>log4j-api</artifactId> -->
+    <!-- <version>2.5</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.logging.log4j</groupId> -->
+    <!-- <artifactId>log4j-core</artifactId> -->
+    <!-- <version>2.5</version> -->
+    <!-- </dependency> -->
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+<!--       <version>4.11</version> -->
     </dependency>
+
+
   </dependencies>
 
   <build>
@@ -84,9 +90,9 @@
               <mainClass>com.epam.simplemessaging.App</mainClass>
             </manifest>
           </archive>
-<!--           <descriptors> -->
-<!--             <descriptor>src/main/assembly/standalone.xml</descriptor> -->
-<!--           </descriptors> -->
+          <!-- <descriptors> -->
+          <!-- <descriptor>src/main/assembly/standalone.xml</descriptor> -->
+          <!-- </descriptors> -->
           <finalName>standalone</finalName>
         </configuration>
         <!-- <executions> -->

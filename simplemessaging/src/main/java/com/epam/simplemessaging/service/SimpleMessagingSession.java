@@ -11,9 +11,8 @@ public interface SimpleMessagingSession {
 	public void sendMessage(Message message);
 	/**
 	 * Synchronously receives a message for current user.
-	 * Waits until any message appears.
-	 * @param timeoutMs
+	 * Waits until any message appears if the inbox is empty.
 	 * @return the message received.
 	 */
-	public Message receiveMessage(long timeoutMs);
+	public Message receiveMessage();
 }

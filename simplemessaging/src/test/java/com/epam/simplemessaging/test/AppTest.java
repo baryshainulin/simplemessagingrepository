@@ -1,26 +1,32 @@
 package com.epam.simplemessaging.test;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.epam.simplemessaging.AppInitializer;
 import com.epam.simplemessaging.service.Message;
 import com.epam.simplemessaging.service.SimpleMessagingSession;
 import com.epam.simplemessaging.service.SimpleMessagingSessionFactory;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 /**
  * Unit test for testing of simple messaging service concurrently.
  */
-public class AppTest extends TestCase {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { AppInitializer.class })
+public class AppTest {
   private static final Logger theLogger = Logger.getLogger(AppTest.class.getName());
 
   private static final int NUMBER_OF_SENDER_THREADS = 10;
   private static final int NUMBER_OF_RECEIVER_THREADS = 10;
   private static final int QUEUE_CAPACITY = 5;
 
-  private SimpleMessagingSessionFactory factory = SimpleMessagingSessionFactory.getInstance();
+  @Autowired(required = true)
+  SimpleMessagingSessionFactory factory;
 
   private class SenderTask implements Runnable {
 
@@ -32,7 +38,7 @@ public class AppTest extends TestCase {
     }
 
     public void run() {
-      SimpleMessagingSession session = factory.getSession(userId, "1", false);
+      SimpleMessagingSession session = factory.getSession(userId);
       String textMessage = "Content:" + userId;
       Message message = new Message();
       message.setTo("toUser");
@@ -56,10 +62,10 @@ public class AppTest extends TestCase {
     }
 
     public void run() {
-      SimpleMessagingSession session = factory.getSession(userId, "1", false);
+      SimpleMessagingSession session = factory.getSession(userId);
       theLogger
           .info("Receiving messages by user " + userId + ", number of succeeded receiver threads is " + numberOfReceiverThreadsSucceeded);
-      session.receiveMessage(0);
+      session.receiveMessage();
       numberOfReceiverThreadsSucceeded++;
       theLogger.info(String.format("Finished receiving a message by user %s. Number of succeeed receiver threads is %s", userId,
           numberOfReceiverThreadsSucceeded));
@@ -71,26 +77,12 @@ public class AppTest extends TestCase {
   private volatile int numberOfReceiverThreadsSucceeded;
 
   /**
-   * Create the test case
-   *
-   * @param testName
-   *          name of the test case
-   */
-  public AppTest(String testName) {
-    super(testName);
-  }
-
-  /**
-   * @return the suite of tests being tested
-   */
-  public static Test suite() {
-    return new TestSuite(AppTest.class);
-  }
-
-  /**
    * The main entry to the test.
+   * 
+   * @throws InterruptedException
    */
-  public void testApp() {
+  @Test
+  public void testApp() throws InterruptedException {
 
     theLogger.info("Start executing simple messaging service test.");
 
@@ -107,7 +99,7 @@ public class AppTest extends TestCase {
     // has reached
     // other threads are still blocked, let's check the number of succeeded
     // sender threads
-    assertEquals("Number of finished sender threads.", QUEUE_CAPACITY, numberOfSenderThreadsSucceeded);
+    Assert.assertEquals("Number of finished sender threads.", QUEUE_CAPACITY, numberOfSenderThreadsSucceeded);
 
     theLogger.info("Starting receiver threads.");
     // run a set of receiver threads to test the service
@@ -118,22 +110,19 @@ public class AppTest extends TestCase {
     }
 
     doPause();
-    
+
     // some number of receiver threads did finish work because they emptied the
     // queue
     // other threads are still blocked, let's check the number of succeeded
     // receiver threads
-    assertEquals("Number of finished receiver threads", NUMBER_OF_RECEIVER_THREADS - QUEUE_CAPACITY, numberOfReceiverThreadsSucceeded);
-    
+    Assert.assertEquals("Number of finished receiver threads", NUMBER_OF_RECEIVER_THREADS - QUEUE_CAPACITY,
+        numberOfReceiverThreadsSucceeded);
+
     // TODO: add tests to check an order of messages
   }
 
-  private void doPause() {
-    try {
-      Thread.sleep(200);
-    } catch (InterruptedException e) {
-      theLogger.error(e);
-    }
+  private void doPause() throws InterruptedException {
+    Thread.sleep(200);
   }
 
   private String generateUserId(int i) {
